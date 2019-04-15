@@ -1,42 +1,18 @@
-// function registerServiceWorker() {
-//     // register sw script in supporting browsers
-//     if ('serviceWorker' in navigator) {
-//         navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
-//             console.log('Service Worker registered successfully.');
-//         }).catch(error => {
-//             console.log('Service Worker registration failed:', error);
-//         });
-//     }
-// }
-self.addEventListener('install', e => {
-    e.waitUntil(
-        // after the service worker is installed,
-        // open a new cache
-        caches.open('my-pwa-cache').then(cache => {
-            // add all URLs of resources we want to cache
-            return cache.addAll([
-                '/',
-                '/index.html',
-                '/favicon.ico',
-                '/styles/main.min.css',
-                '/scripts/main.min.js',
-            ]);
-        })
-    );
-});
-
 // This is the "Offline page" service worker
 
-const CACHE = "cacheSW-page";
+const CACHE = "cache-page";
+
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "shame.html";
 
 // Install stage sets up the offline page in the cache and opens a new cache
-self.addEventListener("install", e => {
+self.addEventListener("install", function(event) {
+    console.log("Install Event processing");
+
     event.waitUntil(
-        // after the service worker is installed,
-        // open a new cache
-        caches.open(CACHE).then(cache => {
+        caches.open(CACHE).then(function(cache) {
             console.log("Cached offline page during install");
+
             if (offlineFallbackPage === "shame.html") {
                 return cache.add(new Response("TODO: Update the value of the offlineFallbackPage constant in the serviceworker."));
             }
