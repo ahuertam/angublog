@@ -1,26 +1,26 @@
 // This is the "Offline page" service worker
 
-const CACHE = "cache-page";
-
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
+const CACHE = "cacheSW-page";
 const offlineFallbackPage = "shame.html";
 
-// Install stage sets up the offline page in the cache and opens a new cache
-self.addEventListener("install", function(event) {
-    console.log("Install Event processing");
-
-    event.waitUntil(
-        caches.open(CACHE).then(function(cache) {
-            console.log("Cached offline page during install");
-
-            if (offlineFallbackPage === "shame.html") {
-                return cache.add(new Response("TODO: Update the value of the offlineFallbackPage constant in the serviceworker."));
-            }
-
-            return cache.add(offlineFallbackPage);
+self.addEventListener('install', e => {
+    e.waitUntil(
+        // after the service worker is installed,
+        // open a new cache
+        caches.open(CACHE).then(cache => {
+            // add all URLs of resources we want to cache
+            return cache.addAll([
+                '/',
+                '/index.html',
+                '/favicon.ico',
+                '/shame.css',
+                '/shame.html',
+                '/apple-touch-icon.png',
+            ]);
         })
     );
 });
+
 
 // If any fetch fails, it will show the offline page.
 self.addEventListener("fetch", function(event) {
@@ -35,7 +35,6 @@ self.addEventListener("fetch", function(event) {
             ) {
                 return;
             }
-
             console.error("Network request Failed. Serving offline page " + error);
             return caches.open(CACHE).then(function(cache) {
                 return cache.match(offlineFallbackPage);
