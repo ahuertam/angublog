@@ -10,12 +10,12 @@ self.addEventListener('install', e => {
         caches.open(CACHE).then(cache => {
             // add all URLs of resources we want to cache
             return cache.addAll([
-                '/',
-                '/index.html',
-                '/favicon.ico',
-                '/shame.css',
-                '/shame.html',
-                '/apple-touch-icon.png',
+                '/angublog',
+                '/angublog/index.html',
+                '/angublog/favicon.ico',
+                '/angublog/shame.css',
+                '/angublog/shame.html',
+                '/angublog/apple-touch-icon.png',
             ]);
         })
     );
